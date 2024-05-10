@@ -1,9 +1,23 @@
-POST http://localhost:3333/accounts
+@baseUrl = http://localhost:3333
+
+# @name created_account
+POST {{baseUrl}}/accounts
 Content-Type: application/json
 
 {
-  "name": "Jean",
-  "email": "jean@gmail.com",
+  "name": "John Doe",
+  "email": "johndoe@hotmail.com",
+  "password": "123456"
+}
+
+### 
+# @name validation_error
+POST {{baseUrl}}/accounts
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "johndoe.com",
   "password": "123456"
 }
 
