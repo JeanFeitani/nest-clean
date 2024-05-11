@@ -29,7 +29,7 @@ export class Answer extends AggregateRoot<AnswerProps> {
 
     const inNewAnswer = !id
 
-    // TODO: esse metodo create cria uma referência para Answer e não a answer?
+    // TODO: esse metodo create cria uma referência para Answer e não a answer? tem algo a ver com o mapper , aula 6 before
     if (inNewAnswer) {
       answer.addDomainEvent(new AnswerCreatedEvent(answer))
     }
