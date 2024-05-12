@@ -34,7 +34,5 @@ export class OnQuestionBestAnswerChosen implements EventHandler {
         content: `A resposta que você enviou em "${question.title.substring(0, 20).concat('...')}" foi escolhida pelo autor!`,
       })
     }
-
-    console.log(answer)
   }
 }
