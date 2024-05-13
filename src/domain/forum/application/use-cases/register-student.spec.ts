@@ -4,19 +4,21 @@ import { FakeHasher } from 'test/cryptography/fake-hasher'
 
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let fakeHasher: FakeHasher
+
 let sut: RegisterStudentUseCase
 
-describe('Register Student', async () => {
+describe('Register Student', () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     fakeHasher = new FakeHasher()
+
     sut = new RegisterStudentUseCase(inMemoryStudentsRepository, fakeHasher)
   })
 
   it('should be able to register a new student', async () => {
     const result = await sut.execute({
       name: 'John Doe',
-      email: 'jondoe@example.com',
+      email: 'johndoe@example.com',
       password: '123456',
     })
 
@@ -25,10 +27,11 @@ describe('Register Student', async () => {
       student: inMemoryStudentsRepository.items[0],
     })
   })
-  it('should be hash student password upon registration', async () => {
+
+  it('should hash student password upon registration', async () => {
     const result = await sut.execute({
       name: 'John Doe',
-      email: 'jondoe@example.com',
+      email: 'johndoe@example.com',
       password: '123456',
     })
 
