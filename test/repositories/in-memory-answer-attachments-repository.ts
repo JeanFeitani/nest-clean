@@ -1,4 +1,4 @@
-import { AnswerAttachmentsRepository } from '@/domain/forum/application/repositories/answers-attachments-repository'
+import { AnswerAttachmentsRepository } from '@/domain/forum/application/repositories/answer-attachments-repository'
 import { AnswerAttachment } from '@/domain/forum/enterprise/entities/answer-attachment'
 
 export class InMemoryAnswerAttachmentsRepository
