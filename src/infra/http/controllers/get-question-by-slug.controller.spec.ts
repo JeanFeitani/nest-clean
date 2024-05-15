@@ -1,3 +1,4 @@
+import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
@@ -7,29 +8,28 @@ import request from 'supertest'
 import { QuestionFactory } from 'test/factories/make-question'
 import { StudentFactory } from 'test/factories/make-student'
 
-describe('Fetch recent questions (E2E)', () => {
+describe('Get Question By Slug (E2E)', () => {
   let app: INestApplication
   let jwt: JwtService
-  let studentFactory: StudentFactory
   let questionFactory: QuestionFactory
+  let studentFactory: StudentFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [StudentFactory, QuestionFactory],
+      providers: [StudentFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
-    questionFactory = moduleRef.get(QuestionFactory)
     studentFactory = moduleRef.get(StudentFactory)
-
+    questionFactory = moduleRef.get(QuestionFactory)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test('[GET] /questions', async () => {
+  test('[GET] /questions:slug', async () => {
     const user = await studentFactory.makePrismaStudent()
 
     const acessToken = jwt.sign({ sub: user.id.toString() })
@@ -37,23 +37,16 @@ describe('Fetch recent questions (E2E)', () => {
     await questionFactory.makePrismaQuestion({
       authorId: user.id,
       title: 'Question 1',
-    })
-
-    await questionFactory.makePrismaQuestion({
-      authorId: user.id,
-      title: 'Question 2',
+      slug: Slug.create('question-1'),
     })
 
     const response = await request(app.getHttpServer())
-      .get('/questions')
+      .get('/questions/question-1')
       .set('Authorization', `Bearer ${acessToken}`)
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      questions: [
-        expect.objectContaining({ title: 'Question 1' }),
-        expect.objectContaining({ title: 'Question 2' }),
-      ],
+      questions: expect.objectContaining({ title: 'Question 1' }),
     })
   })
 })
