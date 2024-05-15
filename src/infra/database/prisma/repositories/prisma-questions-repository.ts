@@ -34,6 +34,8 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       return null
     }
 
+    console.log(PrismaQuestionMapper.toDomain(question))
+
     return PrismaQuestionMapper.toDomain(question)
   }
 
