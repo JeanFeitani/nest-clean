@@ -1,5 +1,6 @@
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -8,12 +9,13 @@ import { AnswerFactory } from 'test/factories/make-answer'
 import { QuestionFactory } from 'test/factories/make-question'
 import { StudentFactory } from 'test/factories/make-student'
 
-describe('Fetch questions answers (E2E)', () => {
+describe('Edit Anwser (E2E)', () => {
   let app: INestApplication
+  let prisma: PrismaService
   let jwt: JwtService
-  let studentFactory: StudentFactory
-  let questionFactory: QuestionFactory
   let answerFactory: AnswerFactory
+  let questionFactory: QuestionFactory
+  let studentFactory: StudentFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -22,17 +24,16 @@ describe('Fetch questions answers (E2E)', () => {
     }).compile()
 
     app = moduleRef.createNestApplication()
-
-    questionFactory = moduleRef.get(QuestionFactory)
     studentFactory = moduleRef.get(StudentFactory)
+    questionFactory = moduleRef.get(QuestionFactory)
     answerFactory = moduleRef.get(AnswerFactory)
-
+    prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test('[GET] /questions/:questionId/answers', async () => {
+  test('[PATCH] /answers/:id/choose-as-best', async () => {
     const user = await studentFactory.makePrismaStudent()
 
     const acessToken = jwt.sign({ sub: user.id.toString() })
@@ -41,30 +42,26 @@ describe('Fetch questions answers (E2E)', () => {
       authorId: user.id,
     })
 
-    const questionId = question.id.toString()
+    const answer = await answerFactory.makePrismaAnswer({
+      questionId: question.id,
+      authorId: user.id,
+    })
 
-    await Promise.all([
-      answerFactory.makePrismaAnswer({
-        authorId: user.id,
-        questionId: question.id,
-        content: 'Answer 1',
-      }),
-      answerFactory.makePrismaAnswer({
-        authorId: user.id,
-        questionId: question.id,
-        content: 'Answer 2',
-      }),
-    ])
+    const answerId = answer.id.toString()
+
     const response = await request(app.getHttpServer())
-      .get(`/questions/${questionId}/answers`)
+      .patch(`/answers/${answerId}/choose-as-best`)
+      .send({})
       .set('Authorization', `Bearer ${acessToken}`)
 
-    expect(response.statusCode).toBe(200)
-    expect(response.body).toEqual({
-      answers: expect.arrayContaining([
-        expect.objectContaining({ content: 'Answer 1' }),
-        expect.objectContaining({ content: 'Answer 2' }),
-      ]),
+    expect(response.statusCode).toBe(204)
+
+    const questionOnDatabase = await prisma.question.findFirst({
+      where: {
+        id: question.id.toString(),
+      },
     })
+
+    expect(questionOnDatabase?.bestAnswerId).toEqual(answerId)
   })
 })
