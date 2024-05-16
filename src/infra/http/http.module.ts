@@ -14,6 +14,15 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
 import { GetQuestionBySlugUseCase } from '@/domain/forum/application/use-cases/get-question-by-slug'
 import { EditQuestionController } from './controllers/edit-question.controller'
 import { EditQuestionUseCase } from '@/domain/forum/application/use-cases/edit-question'
+import { EditAnswerUseCase } from '@/domain/forum/application/use-cases/edit-answer'
+import { DeleteAnswerUseCase } from '@/domain/forum/application/use-cases/delete-answer'
+import { CommentOnAnswerUseCase } from '@/domain/forum/application/use-cases/comment-on-answer'
+import { DeleteQuestionUseCase } from '@/domain/forum/application/use-cases/delete-question'
+import { DeleteQuestionController } from './controllers/delete-question.controller'
+import { AnswerQuestionUseCase } from '@/domain/forum/application/use-cases/answer-question'
+import { AnswerQuestionController } from './controllers/answer-question.controller'
+import { EditAnswerController } from './controllers/edit-answer.controller'
+import { DeleteAnswerController } from './controllers/delete-answer-controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -24,6 +33,11 @@ import { EditQuestionUseCase } from '@/domain/forum/application/use-cases/edit-q
     FetchRecentQuestionsController,
     GetQuestionBySlugController,
     EditQuestionController,
+    DeleteQuestionController,
+    AnswerQuestionController,
+    EditAnswerController,
+    DeleteQuestionController,
+    DeleteAnswerController,
   ],
   providers: [
     CreateQuestionUseCase,
@@ -32,6 +46,12 @@ import { EditQuestionUseCase } from '@/domain/forum/application/use-cases/edit-q
     AuthenticateStudentUseCase,
     GetQuestionBySlugUseCase,
     EditQuestionUseCase,
+    EditAnswerUseCase,
+    DeleteAnswerUseCase,
+    CommentOnAnswerUseCase,
+    DeleteQuestionUseCase,
+    AnswerQuestionUseCase,
+    DeleteAnswerUseCase,
   ],
 })
 export class HttpModule {}

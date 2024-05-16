@@ -34,11 +34,10 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       return null
     }
 
-    console.log(PrismaQuestionMapper.toDomain(question))
-
     return PrismaQuestionMapper.toDomain(question)
   }
 
+  // TODO: Sort by createdAt Really?
   async findManyRecent({ page }: PaginationParams) {
     const questions = await this.prisma.question.findMany({
       take: 20,
