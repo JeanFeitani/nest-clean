@@ -9,7 +9,7 @@ import { QuestionFactory } from 'test/factories/make-question'
 import { QuestionCommentFactory } from 'test/factories/make-question-comment'
 import { StudentFactory } from 'test/factories/make-student'
 
-describe('Delete question (E2E)', () => {
+describe('Delete question comment (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -35,7 +35,7 @@ describe('Delete question (E2E)', () => {
     await app.init()
   })
 
-  test('[DELETE] /answers', async () => {
+  test('[DELETE] /questions/comments', async () => {
     const user = await studentFactory.makePrismaStudent()
 
     const acessToken = jwt.sign({ sub: user.id.toString() })
@@ -53,14 +53,14 @@ describe('Delete question (E2E)', () => {
     const questionCommentId = questionComment.id.toString()
 
     const response = await request(app.getHttpServer())
-      .delete(`/comments/${questionCommentId}`)
+      .delete(`/questions/comments/${questionCommentId}`)
       .send({
         authorId: user.id,
         questionCommentId,
       })
       .set('Authorization', `Bearer ${acessToken}`)
 
-    expect(response.statusCode).toBe(200)
+    expect(response.statusCode).toBe(204)
 
     const questionOnDatabase = await prisma.question.findUnique({
       where: { id: questionCommentId },

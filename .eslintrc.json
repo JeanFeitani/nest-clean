@@ -1,6 +1,7 @@
 {
   "extends": "@rocketseat/eslint-config/next",
   "rules": {
-    "no-useless-constructor": "off"
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-explicit-any": "warn"
   }
 }
