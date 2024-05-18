@@ -39,7 +39,7 @@ describe('Fetch answer comments (E2E)', () => {
     await app.init()
   })
   // TODO: teste falhando
-  test.skip('[GET] /answers/:answerId/comments', async () => {
+  test('[GET] /answers/:answerId/comments', async () => {
     const user = await studentFactory.makePrismaStudent()
 
     const accessToken = jwt.sign({ sub: user.id.toString() })

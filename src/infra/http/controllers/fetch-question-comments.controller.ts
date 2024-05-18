@@ -35,8 +35,6 @@ export class FetchQuestionCommentsController {
       questionId,
     })
 
-    console.log(result)
-
     if (result.isLeft()) {
       throw new BadRequestException()
     }

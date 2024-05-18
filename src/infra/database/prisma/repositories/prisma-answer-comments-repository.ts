@@ -29,7 +29,6 @@ export class PrismaAnswerCommentsRepository
     answerId: string,
     { page }: PaginationParams,
   ): Promise<AnswerComment[]> {
-    throw new Error('Method not implemented.')
     const answerComments = await this.prisma.comment.findMany({
       where: {
         answerId,

@@ -38,6 +38,7 @@ import { FetchQuestionCommentsController } from './controllers/fetch-question-co
 import { FetchQuestionCommentsUseCase } from '@/domain/forum/application/use-cases/fetch-question-comments'
 import { FetchAnswerCommentsUseCase } from '@/domain/forum/application/use-cases/fetch-answer-comments'
 import { FetchAnswerCommentsController } from './controllers/fetch-answer-comments.controller'
+import { UploadAttachmentsController } from './controllers/upload-attachments.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -61,6 +62,7 @@ import { FetchAnswerCommentsController } from './controllers/fetch-answer-commen
     DeleteAnswerCommentController,
     FetchQuestionCommentsController,
     FetchAnswerCommentsController,
+    UploadAttachmentsController,
   ],
   providers: [
     RegisterStudentUseCase,
