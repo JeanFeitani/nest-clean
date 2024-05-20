@@ -20,14 +20,14 @@ export class PrismaQuestionAttachmentMapper {
   static toPrismaUpdateMany(
     attachments: QuestionAttachment[],
   ): Prisma.AttachmentUpdateManyArgs {
-    const attachmentIds = attachments.map((attachment) =>
+    const attachmentsIds = attachments.map((attachment) =>
       attachment.attachmentId.toString(),
     )
 
     return {
       where: {
         id: {
-          in: attachmentIds,
+          in: attachmentsIds,
         },
       },
       data: {
