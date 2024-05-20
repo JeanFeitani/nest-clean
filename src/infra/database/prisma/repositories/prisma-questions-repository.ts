@@ -75,6 +75,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
         },
         data,
       }),
+
       this.questionAttachmentsRepository.createMany(
         question.attachments.getNewItems(),
       ),

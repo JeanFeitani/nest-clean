@@ -1,5 +1,5 @@
 import { DomainEvents } from '@/core/events/domain-events'
-import { PaginationParams } from '@/core/repositories/paginations-params'
+import { PaginationParams } from '@/core/repositories/pagination-params'
 import { AnswerAttachmentsRepository } from '@/domain/forum/application/repositories/answer-attachments-repository'
 import { AnswersRepository } from '@/domain/forum/application/repositories/answers-repository'
 import { Answer } from '@/domain/forum/enterprise/entities/answer'
@@ -8,7 +8,7 @@ export class InMemoryAnswersRepository implements AnswersRepository {
   public items: Answer[] = []
 
   constructor(
-    private answersAttachmentsRepository: AnswerAttachmentsRepository,
+    private answerAttachmentsRepository: AnswerAttachmentsRepository,
   ) {}
 
   async findManyByQuestionId(questionId: string, { page }: PaginationParams) {
@@ -23,6 +23,13 @@ export class InMemoryAnswersRepository implements AnswersRepository {
     const itemIndex = this.items.findIndex((item) => item.id === answer.id)
 
     this.items[itemIndex] = answer
+
+    await this.answerAttachmentsRepository.createMany(
+      answer.attachments.getNewItems(),
+    )
+    await this.answerAttachmentsRepository.deleteMany(
+      answer.attachments.getRemovedItems(),
+    )
 
     // TODO: não faço idéia de por que isso está aqui
     DomainEvents.dispatchEventsForAggregate(answer.id)
@@ -43,11 +50,15 @@ export class InMemoryAnswersRepository implements AnswersRepository {
 
     this.items.splice(itemIndex, 1)
 
-    this.answersAttachmentsRepository.deleteManyByAnswerId(answer.id.toString())
+    this.answerAttachmentsRepository.deleteManyByAnswerId(answer.id.toString())
   }
 
   async create(answer: Answer) {
     this.items.push(answer)
+
+    await this.answerAttachmentsRepository.createMany(
+      answer.attachments.getItems(),
+    )
 
     DomainEvents.dispatchEventsForAggregate(answer.id)
   }

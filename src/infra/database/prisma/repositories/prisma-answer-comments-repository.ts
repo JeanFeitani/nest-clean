@@ -3,7 +3,7 @@ import { AnswerComment } from '@/domain/forum/enterprise/entities/answer-comment
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 import { PrismaAnswerCommentMapper } from '../mappers/prisma-answer-comment-mapper'
-import { PaginationParams } from '@/core/repositories/paginations-params'
+import { PaginationParams } from '@/core/repositories/pagination-params'
 
 @Injectable()
 export class PrismaAnswerCommentsRepository

@@ -5,6 +5,7 @@ import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+import { AttachmentFactory } from 'test/factories/make-attachment'
 import { QuestionFactory } from 'test/factories/make-question'
 import { StudentFactory } from 'test/factories/make-student'
 
@@ -14,16 +15,18 @@ describe('Answer question (E2E)', () => {
   let jwt: JwtService
   let questionFactory: QuestionFactory
   let studentFactory: StudentFactory
+  let attachmentFactory: AttachmentFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [StudentFactory, QuestionFactory],
+      providers: [StudentFactory, QuestionFactory, AttachmentFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
     studentFactory = moduleRef.get(StudentFactory)
     questionFactory = moduleRef.get(QuestionFactory)
+    attachmentFactory = moduleRef.get(AttachmentFactory)
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
 
@@ -35,6 +38,9 @@ describe('Answer question (E2E)', () => {
 
     const acessToken = jwt.sign({ sub: user.id.toString() })
 
+    const attachment1 = await attachmentFactory.makePrismaAttachment()
+    const attachment2 = await attachmentFactory.makePrismaAttachment()
+
     const question = await questionFactory.makePrismaQuestion({
       authorId: user.id,
     })
@@ -45,6 +51,7 @@ describe('Answer question (E2E)', () => {
       .post(`/questions/${questionId}/answers`)
       .send({
         content: 'New Answer',
+        attachmentsIds: [attachment1.id.toString(), attachment2.id.toString()],
       })
       .set('Authorization', `Bearer ${acessToken}`)
 
@@ -57,5 +64,13 @@ describe('Answer question (E2E)', () => {
     })
 
     expect(answerOnDatabase).toBeTruthy()
+
+    const attachmentsOnDatabase = await prisma.attachment.findMany({
+      where: {
+        answerId: answerOnDatabase?.id,
+      },
+    })
+
+    expect(attachmentsOnDatabase).toHaveLength(2)
   })
 })
