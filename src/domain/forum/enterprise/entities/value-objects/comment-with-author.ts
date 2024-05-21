@@ -10,9 +10,9 @@ interface CommentWithAuthorProps {
   updatedAt?: Date | null
 }
 
-export class CommentWithAuhor extends ValueObject<CommentWithAuthorProps> {
+export class CommentWithAuthor extends ValueObject<CommentWithAuthorProps> {
   static create(props: CommentWithAuthorProps) {
-    return new CommentWithAuhor(props)
+    return new CommentWithAuthor(props)
   }
 
   get commentId() {

@@ -1,7 +1,7 @@
 import { Either, right } from '@/core/either'
 import { QuestionCommentsRepository } from '../repositories/question-comments-repository'
 import { Injectable } from '@nestjs/common'
-import { CommentWithAuhor } from '../../enterprise/entities/value-objects/comment-with-author'
+import { CommentWithAuthor } from '../../enterprise/entities/value-objects/comment-with-author'
 
 interface FetchQuestionCommentsRequest {
   page: number
@@ -10,7 +10,7 @@ interface FetchQuestionCommentsRequest {
 
 type FetchQuestionCommentsResponse = Either<
   null,
-  { comments: CommentWithAuhor[] }
+  { comments: CommentWithAuthor[] }
 >
 
 @Injectable()

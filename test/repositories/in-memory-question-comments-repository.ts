@@ -2,7 +2,7 @@ import { PaginationParams } from '@/core/repositories/pagination-params'
 import { QuestionCommentsRepository } from '@/domain/forum/application/repositories/question-comments-repository'
 import { QuestionComment } from '@/domain/forum/enterprise/entities/question-comment'
 import { InMemoryStudentsRepository } from './in-memory-students-repository'
-import { CommentWithAuhor } from '@/domain/forum/enterprise/entities/value-objects/comment-with-author'
+import { CommentWithAuthor } from '@/domain/forum/enterprise/entities/value-objects/comment-with-author'
 
 export class InMemoryQuestionCommentsRepository
   implements QuestionCommentsRepository
@@ -37,7 +37,7 @@ export class InMemoryQuestionCommentsRepository
           )
         }
 
-        return CommentWithAuhor.create({
+        return CommentWithAuthor.create({
           commentId: comment.id,
           authorId: comment.authorId,
           createdAt: comment.createdAt,
