@@ -100,8 +100,6 @@ describe('Edit Answer', async () => {
       attachmentsIds: ['1', '3'],
     })
 
-    console.log(inMemoryAnswerAttachmentsRepository.items[1])
-
     expect(result.isRight()).toBe(true)
     expect(inMemoryAnswerAttachmentsRepository.items).toHaveLength(2)
     expect(inMemoryAnswerAttachmentsRepository.items).toEqual(

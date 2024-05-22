@@ -64,7 +64,7 @@ describe('Fetch question comments', () => {
     )
   })
 
-  it.skip('should be able to fetch paginated question comments', async () => {
+  it('should be able to fetch paginated question comments', async () => {
     const student = MakeStudent({ name: 'John Doe' })
 
     studentsRepository.items.push(student)
