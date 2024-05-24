@@ -12,6 +12,8 @@ export class GetQuestionBySlugController {
       slug,
     })
 
+    console.log()
+
     if (result.isLeft()) {
       throw new BadRequestException()
     }

@@ -57,9 +57,7 @@ describe('Get question by slug (E2E)', () => {
       title: 'Some attachment',
     })
 
-    console.log(attachment)
-
-    await questionAttachmentFactory.makePrismaAttachment({
+    await questionAttachmentFactory.makePrismaQuestionAttachment({
       attachmentId: attachment.id,
       questionId: question.id,
     })

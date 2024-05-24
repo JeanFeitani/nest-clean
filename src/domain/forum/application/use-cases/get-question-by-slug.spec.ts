@@ -6,8 +6,8 @@ import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attac
 import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 import { MakeStudent } from 'test/factories/make-student'
 import { MakeQuestion } from 'test/factories/make-question'
-import { MakeQuestionAttachment } from 'test/factories/make-question-attachment'
 import { MakeAttachment } from 'test/factories/make-attachment'
+import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
 
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
@@ -50,7 +50,7 @@ describe('Get Question By Slug', () => {
     inMemoryAttachmentsRepository.items.push(attachment)
 
     inMemoryQuestionAttachmentsRepository.items.push(
-      MakeQuestionAttachment({
+      makeQuestionAttachment({
         attachmentId: attachment.id,
         questionId: newQuestion.id,
       }),

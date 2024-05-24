@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memory-question-attachments-repository'
 import { MakeQuestion } from 'test/factories/make-question'
-import { MakeQuestionAttachment } from 'test/factories/make-question-attachment'
+import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
@@ -35,11 +35,11 @@ describe('Edit Question', () => {
     await inMemoryQuestionsRepository.create(newQuestion)
 
     inMemoryQuestionAttachmentsRepository.items.push(
-      MakeQuestionAttachment({
+      makeQuestionAttachment({
         questionId: newQuestion.id,
         attachmentId: new UniqueEntityID('1'),
       }),
-      MakeQuestionAttachment({
+      makeQuestionAttachment({
         questionId: newQuestion.id,
         attachmentId: new UniqueEntityID('2'),
       }),
@@ -102,11 +102,11 @@ describe('Edit Question', () => {
     await inMemoryQuestionsRepository.create(newQuestion)
 
     inMemoryQuestionAttachmentsRepository.items.push(
-      MakeQuestionAttachment({
+      makeQuestionAttachment({
         questionId: newQuestion.id,
         attachmentId: new UniqueEntityID('1'),
       }),
-      MakeQuestionAttachment({
+      makeQuestionAttachment({
         questionId: newQuestion.id,
         attachmentId: new UniqueEntityID('2'),
       }),
