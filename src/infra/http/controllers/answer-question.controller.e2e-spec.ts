@@ -12,10 +12,10 @@ import { StudentFactory } from 'test/factories/make-student'
 describe('Answer question (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let jwt: JwtService
-  let questionFactory: QuestionFactory
   let studentFactory: StudentFactory
+  let questionFactory: QuestionFactory
   let attachmentFactory: AttachmentFactory
+  let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -24,10 +24,11 @@ describe('Answer question (E2E)', () => {
     }).compile()
 
     app = moduleRef.createNestApplication()
+
+    prisma = moduleRef.get(PrismaService)
     studentFactory = moduleRef.get(StudentFactory)
     questionFactory = moduleRef.get(QuestionFactory)
     attachmentFactory = moduleRef.get(AttachmentFactory)
-    prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
@@ -36,10 +37,7 @@ describe('Answer question (E2E)', () => {
   test('[POST] /questions/:questionId/answers', async () => {
     const user = await studentFactory.makePrismaStudent()
 
-    const acessToken = jwt.sign({ sub: user.id.toString() })
-
-    const attachment1 = await attachmentFactory.makePrismaAttachment()
-    const attachment2 = await attachmentFactory.makePrismaAttachment()
+    const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const question = await questionFactory.makePrismaQuestion({
       authorId: user.id,
@@ -47,19 +45,22 @@ describe('Answer question (E2E)', () => {
 
     const questionId = question.id.toString()
 
+    const attachment1 = await attachmentFactory.makePrismaAttachment()
+    const attachment2 = await attachmentFactory.makePrismaAttachment()
+
     const response = await request(app.getHttpServer())
       .post(`/questions/${questionId}/answers`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        content: 'New Answer',
-        attachmentsIds: [attachment1.id.toString(), attachment2.id.toString()],
+        content: 'New answer',
+        attachments: [attachment1.id.toString(), attachment2.id.toString()],
       })
-      .set('Authorization', `Bearer ${acessToken}`)
 
     expect(response.statusCode).toBe(201)
 
     const answerOnDatabase = await prisma.answer.findFirst({
       where: {
-        content: 'New Answer',
+        content: 'New answer',
       },
     })
 

@@ -6,7 +6,7 @@ import {
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { randomUUID } from 'node:crypto'
 import { Injectable } from '@nestjs/common'
-import { EnvService } from '../env.service'
+import { EnvService } from '../env/env.service'
 
 @Injectable()
 export class R2Storage implements Uploader {
@@ -19,7 +19,7 @@ export class R2Storage implements Uploader {
       endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
       region: 'auto',
       credentials: {
-        accessKeyId: envService.get('AWS_ACESS_KEY_ID'),
+        accessKeyId: envService.get('AWS_ACCESS_KEY_ID'),
         secretAccessKey: envService.get('AWS_SECRET_ACCESS_KEY'),
       },
     })

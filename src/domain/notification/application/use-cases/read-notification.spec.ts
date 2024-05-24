@@ -1,7 +1,7 @@
 import { InMemoryNotificationsRepository } from 'test/repositories/in-memory-notifications-repository'
 import { ReadNotificationUseCase } from './read-notification'
-import { MakeNotification } from 'test/factories/make-notification'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { makeNotification } from 'test/factories/make-notification'
 
 let inMemoryNotificationsRepository: InMemoryNotificationsRepository
 let sut: ReadNotificationUseCase
@@ -13,7 +13,7 @@ describe('Read Notification', async () => {
   })
 
   it('should be able to read a notification', async () => {
-    const notification = MakeNotification()
+    const notification = makeNotification()
 
     inMemoryNotificationsRepository.create(notification)
 
@@ -28,7 +28,7 @@ describe('Read Notification', async () => {
     )
   })
   it('should not be able to read a notification from different recipient', async () => {
-    const notification = MakeNotification()
+    const notification = makeNotification()
 
     inMemoryNotificationsRepository.create(notification)
 
